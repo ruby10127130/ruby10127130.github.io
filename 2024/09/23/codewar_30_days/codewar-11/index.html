@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","width":320,"display":"always","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="題目寫一個計算骰子遊戲得分的 function。一共會擲骰 5 次，每次所用的骰子都是 6 面骰。得分規則如下： 12345678910&#x2F;*  三個 1 點 &#x3D;&gt; 1000 分  三個 6 點 &#x3D;&gt;  600 分  三個 5 點 &#x3D;&gt;  500 分  三個 4 點 &#x3D;&gt;  400 分  三個 3 點 &#x3D;&gt;  300 分  三個 2 點 &#x3D;&gt;  200 分  一個">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CodeWar [11]-Greed is good">
+<meta property="og:url" content="http://example.com/2024/09/23/codewar_30_days/codewar-11/index.html">
+<meta property="og:site_name" content="Ruby&#39;s Notes">
+<meta property="og:description" content="題目寫一個計算骰子遊戲得分的 function。一共會擲骰 5 次，每次所用的骰子都是 6 面骰。得分規則如下： 12345678910&#x2F;*  三個 1 點 &#x3D;&gt; 1000 分  三個 6 點 &#x3D;&gt;  600 分  三個 5 點 &#x3D;&gt;  500 分  三個 4 點 &#x3D;&gt;  400 分  三個 3 點 &#x3D;&gt;  300 分  三個 2 點 &#x3D;&gt;  200 分  一個">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2024-09-23T00:00:00.000Z">
+<meta property="article:modified_time" content="2024-09-28T06:17:18.391Z">
+<meta property="article:author" content="Ruby">
+<meta property="article:tag" content="CodeWar">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2024/09/23/codewar_30_days/codewar-11/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-TW'
+  };
+</script>
+
+  <title>CodeWar [11]-Greed is good | Ruby's Notes</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切換導航欄">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Ruby's Notes</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首頁</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>關於</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>標籤</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分類</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>歸檔</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-TW">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/09/23/codewar_30_days/codewar-11/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/../images/avatar_leaf.jpg">
+      <meta itemprop="name" content="Ruby">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ruby's Notes">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CodeWar [11]-Greed is good
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">發表於</span>
+
+              <time title="創建時間：2024-09-23 08:00:00" itemprop="dateCreated datePublished" datetime="2024-09-23T08:00:00+08:00">2024-09-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新於</span>
+                <time title="修改時間：2024-09-28 14:17:18" itemprop="dateModified" datetime="2024-09-28T14:17:18+08:00">2024-09-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分類於</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CodeWar-30-%E5%A4%A9/" itemprop="url" rel="index"><span itemprop="name">CodeWar 30 天</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="題目"><a href="#題目" class="headerlink" title="題目"></a>題目</h3><p>寫一個計算骰子遊戲得分的 function。<br>一共會擲骰 5 次，每次所用的骰子都是 6 面骰。<br>得分規則如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">  三個 1 點 =&gt; 1000 分</span></span><br><span class="line"><span class="comment">  三個 6 點 =&gt;  600 分</span></span><br><span class="line"><span class="comment">  三個 5 點 =&gt;  500 分</span></span><br><span class="line"><span class="comment">  三個 4 點 =&gt;  400 分</span></span><br><span class="line"><span class="comment">  三個 3 點 =&gt;  300 分</span></span><br><span class="line"><span class="comment">  三個 2 點 =&gt;  200 分</span></span><br><span class="line"><span class="comment">  一個 1 點  =&gt;  100 分</span></span><br><span class="line"><span class="comment">  一個  5 點  =&gt;   50 分</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<p>注意：一個骰子只能被計算為一次得分。</p>
+<span id="more"></span>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><ol>
+<li>所有規則中只有骰面 1 和骰面 5 的得分規則和其他點數不同</li>
+<li>骰面 1 的得分規則最複雜，骰面 5 次之</li>
+<li>除了骰面 1 和骰面 5 ，其餘骰面沒有 3 次以上則無法得分</li>
+<li>將 5 次執骰結果以陣列格式紀錄，並由小到大按照順序排列，再以連續數字為分組，計算出本次執骰結果中所得的各點次數</li>
+</ol>
+<h3 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">score</span>(<span class="params"> dice </span>) &#123;</span><br><span class="line">  <span class="comment">// 將擲骰結果按照順序排列後再切分，會得到像是 [&#x27;222&#x27;, &#x27;3&#x27;, &#x27;4&#x27;] 這樣的結果來表示一共獲得 3 次 2 點，1 次 3 點，1 次 4 點</span></span><br><span class="line">  <span class="keyword">let</span> sortArray = ([].<span class="title function_">concat</span>(dice)).<span class="title function_">sort</span>(<span class="function">(<span class="params">a, b</span>)=&gt;</span> &#123; <span class="keyword">return</span> a - b; &#125;).<span class="title function_">join</span>(<span class="string">&#x27;&#x27;</span>).<span class="title function_">match</span>(<span class="regexp">/(\d)\1*/g</span>)</span><br><span class="line">  <span class="keyword">let</span> score = <span class="number">0</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 計分 function</span></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">getPoint</span> = (<span class="params">diceName, times</span>) =&gt; &#123;</span><br><span class="line">   <span class="keyword">let</span> points = <span class="number">0</span>;</span><br><span class="line">   <span class="comment">// 如果骰面點數為 1，計算出現了幾次不足 3 次的骰面 1</span></span><br><span class="line">   <span class="keyword">if</span> (diceName == <span class="string">&#x27;1&#x27;</span>) &#123;</span><br><span class="line">     points += (times % <span class="number">3</span>) * <span class="number">100</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// 如果骰面點數為 5，計算出現了幾次不足三次的骰面 5</span></span><br><span class="line">   <span class="keyword">if</span> (diceName == <span class="string">&#x27;5&#x27;</span>) &#123;</span><br><span class="line">     points += (times % <span class="number">3</span>) * <span class="number">50</span>;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// 如果次數達三次以上，檢查是不是點數 1，如果是，直接加 1000 分；如果不是，根據骰面點數加上（骰面點數 * 100） 的分數</span></span><br><span class="line">   <span class="keyword">if</span> (times &gt; <span class="number">2</span>) &#123;</span><br><span class="line">     <span class="keyword">if</span> (diceName == <span class="string">&#x27;1&#x27;</span>) &#123;</span><br><span class="line">       points += <span class="number">1000</span>;</span><br><span class="line">     &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">       points += <span class="built_in">parseInt</span>(diceName) * <span class="number">100</span>;</span><br><span class="line">     &#125; </span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> points;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="comment">// 遍歷排列好的陣列來計分</span></span><br><span class="line">  sortArray.<span class="title function_">forEach</span>(<span class="function">(<span class="params">dices</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> times = dices.<span class="property">length</span>;</span><br><span class="line">    <span class="keyword">let</span> diceName = dices[<span class="number">0</span>].<span class="title function_">toString</span>();</span><br><span class="line">    score += <span class="title function_">getPoint</span>(diceName, times);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> score;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="優化方案"><a href="#優化方案" class="headerlink" title="優化方案"></a>優化方案</h3><p>原先的寫法是按照順序的寫法，可以觀察到有很多條件式，擴充不易並且當遊戲中的執骰次數超過 5 次時就會計算錯誤。<br>可以考量這點繼續優化它。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">score</span>(<span class="params"> dice </span>) &#123;</span><br><span class="line">  <span class="comment">// 記錄各骰面的次數</span></span><br><span class="line">  <span class="keyword">var</span> dc = [<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>];</span><br><span class="line">  <span class="comment">// 紀錄三連骰面的得分，例如 3 個 1 點可以得到 1000 分</span></span><br><span class="line">  <span class="keyword">var</span> tdr = [<span class="number">1000</span>,<span class="number">200</span>,<span class="number">300</span>,<span class="number">400</span>,<span class="number">500</span>,<span class="number">600</span>];</span><br><span class="line">  <span class="comment">// 紀錄單骰得分，例如 1 個 1 點可以得到 100 分  </span></span><br><span class="line">  <span class="keyword">var</span> sdr = [<span class="number">100</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">50</span>,<span class="number">0</span>]; </span><br><span class="line">  <span class="comment">// 遍歷陣列來計算擲到每個骰面幾次</span></span><br><span class="line">  dice.<span class="title function_">forEach</span>(<span class="keyword">function</span>(<span class="params">x</span>)&#123; dc[x-<span class="number">1</span>]++; &#125;); </span><br><span class="line">  <span class="comment">// 利用 reduce 累加加總，s 是累加總和，x 是當前次數，i 是點數對應的索引</span></span><br><span class="line">  <span class="comment">// 如果某個點數 &gt;= 3，則加入當前三連骰的對應分數；單一骰子的分數是 sdr[i] * (x % 3)，因為一個骰子不可以重複計算得分，如果在三連骰中計算過了，就不可以再在單骰上計算分數</span></span><br><span class="line">  <span class="keyword">return</span> dc.<span class="title function_">reduce</span>(<span class="keyword">function</span>(<span class="params">s,x,i</span>)&#123; </span><br><span class="line">    <span class="keyword">return</span> s + (x &gt;= <span class="number">3</span>? tdr[i] : <span class="number">0</span>) + sdr[i]*(x % <span class="number">3</span>);</span><br><span class="line">  &#125;,<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CodeWar/" rel="tag"># CodeWar</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/09/23/codewar_30_days/codewar-12/" rel="prev" title="CodeWar [12]-Maximum subarray sum">
+      <i class="fa fa-chevron-left"></i> CodeWar [12]-Maximum subarray sum
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2024/09/27/codewar_30_days/codewar-15/" rel="next" title="CodeWar [15]-Roman Numerals Helper">
+      CodeWar [15]-Roman Numerals Helper <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目錄
+        </li>
+        <li class="sidebar-nav-overview">
+          本站概要
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%8C%E7%9B%AE"><span class="nav-number">1.</span> <span class="nav-text">題目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">解法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%84%AA%E5%8C%96%E6%96%B9%E6%A1%88"><span class="nav-number">4.</span> <span class="nav-text">優化方案</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Ruby"
+      src="/../images/avatar_leaf.jpg">
+  <p class="site-author-name" itemprop="name">Ruby</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分類</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">標籤</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="mailto:ruby10127130@gmail.com" title="E-Mail → mailto:ruby10127130@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fas fa-crown"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ruby</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
